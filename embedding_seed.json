@@ -1,0 +1,20 @@
+[
+    {
+        "id": "1",
+        "category": "method",
+        "code": "public int CalculateTotal(List<int> prices, double tax)",
+        "doc": "/// <summary>\n/// Calculates the total price including tax for a list of items.\n/// </summary>\n/// <param name=\"prices\">A list of integer prices.</param>\n/// <param name=\"tax\">The tax rate to apply (e.g., 1.27 for 27%).</param>\n/// <returns>The final calculated total as an integer.</returns>"
+    },
+    {
+        "id": "2",
+        "category": "async_task",
+        "code": "public async Task<User> GetUserByIdAsync(string id)",
+        "doc": "/// <summary>\n/// Retrieves a user from the database asynchronously based on their unique identifier.\n/// </summary>\n/// <param name=\"id\">The unique string ID of the user.</param>\n/// <returns>A task that represents the asynchronous operation. The task result contains the User object.</returns>"
+    },
+    {
+        "id": "3",
+        "category": "repository",
+        "code": "public void UpdateRecord(Entity data)",
+        "doc": "/// <summary>\n/// Updates an existing record in the repository with the provided entity data.\n/// </summary>\n/// <param name=\"data\">The entity instance containing updated values.</param>\n/// <returns>void</returns>"
+    }
+]
