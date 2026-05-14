@@ -13,6 +13,10 @@ Install the requirements:
 ```
 pip install -r requirements.txt
 ```
+Build the CSDocsGenerator within it's project folder:
+```
+dotnet build
+```
 Start the project: 
 ```
 python main.py
