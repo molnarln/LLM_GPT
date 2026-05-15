@@ -59,7 +59,7 @@ def generate_documentation(new_code):
 
     # PROMPT
     prompt = f"""You are a C# documentation expert. 
-Based on this sample style:
+Based on this sample style (use only the style, but not the parameters from this sample):
 {sample_doc}
 
 Generate XML documentation (summary, params, returns) for the following code.
