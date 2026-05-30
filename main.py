@@ -1,7 +1,7 @@
 import json
+import subprocess
 import chromadb
 from openai import OpenAI
-import subprocess
 
 client = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")
 chroma_client = chromadb.PersistentClient(path="./docs_db")
@@ -46,11 +46,32 @@ def get_context(new_code):
         n_results=1,
         include=["documents", "embeddings", "distances", "metadatas"],
     )
-    print(f"A recall eredménye: {results["documents"][0][0]}\n")
+    print(f"A recall eredménye: {results['documents'][0][0]}\n")
 
     if results["metadatas"]:
         return results["metadatas"][0][0]["doc"]
     return ""
+
+
+def validate_response(raw_content):
+    if not raw_content:
+        return ""
+
+    lines = raw_content.split("\n")
+    clean_lines = []
+
+    for line in lines:
+        stripped = line.strip()
+        if not stripped:
+            continue
+
+        if not stripped.startswith("///"):
+            print(
+                f"   [VALIDÁCIÓS HIBA] Nem várt tartalom érkezett az LLM-től: '{stripped}'"
+            )
+            return ""
+        clean_lines.append(line)
+    return "\n".join(clean_lines)
 
 
 def generate_documentation(new_code):
@@ -59,7 +80,7 @@ def generate_documentation(new_code):
 
     # PROMPT
     prompt = f"""You are a C# documentation expert. 
-Based on this sample style (use only the style, but not the parameters from this sample):
+Based on this sample style (use only the style, but NEVER use the parameters from the sample):
 {sample_doc}
 
 Generate XML documentation (summary, params, returns) for the following code.
@@ -80,7 +101,11 @@ Code to document:
         ],
         temperature=0.1,
     )
-    return response.choices[0].message.content
+
+    raw_content = response.choices[0].message.content
+
+    # Validálom, hogy valóban csak docstring jött vissza a modelltől
+    return validate_response(raw_content)
 
 
 if __name__ == "__main__":
