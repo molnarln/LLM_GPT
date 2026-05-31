@@ -4,86 +4,86 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Minta_ZH1_Bankbetet
+namespace Sample_Exam1_BankDeposit
 {
-    internal class BefektetesiJegy : Bankbetet
+    internal class MutualFundShare : BankDeposit
     {
         private static Random rnd = new Random();
-        private string reszvenyAlap;
+        private string equityFund;
 
-        public string ReszvenyAlap
+        public string EquityFund
         {
-            get { return reszvenyAlap; }
+            get { return equityFund; }
             private set
             {
                 if (String.IsNullOrWhiteSpace(value))
                 {
-                    throw new Exception("ReszvenyAlap nem lehet null!");
+                    throw new Exception("EquityFund cannot be null or empty!");
                 }
-                reszvenyAlap = value;
+                equityFund = value;
             }
         }
-        private double minimumHozam;
 
-        public double MinimumHozam
+        private double minimumYield;
+
+        public double MinimumYield
         {
-            get { return minimumHozam; }
+            get { return minimumYield; }
             set
             {
                 if (value < 0.01 || value > 0.5)
                 {
-                    throw new Exception("Nem megfelelő minimum hozam érték");
+                    throw new Exception("Invalid minimum yield value!");
                 }
-                minimumHozam = value;
+                minimumYield = value;
             }
         }
 
-        private double maximumHozam;
+        private double maximumYield;
 
-        public double MaximumHozam
+        public double MaximumYield
         {
-            get { return maximumHozam; }
+            get { return maximumYield; }
             set
             {
-                if (value < MinimumHozam || value > 0.99)
+                if (value < MinimumYield || value > 0.99)
                 {
-                    throw new Exception("Nem megfelelő maximum hozam érték");
+                    throw new Exception("Invalid maximum yield value!");
                 }
-                maximumHozam = value;
+                maximumYield = value;
             }
         }
 
-        public Kockazat Kockazat { get; set; }
+        public Risk Risk { get; set; }
 
-        public BefektetesiJegy(string azonosito, int kezdotoke, double kamatlab, int lekotesIdeje, string reszvenyAlap, double minimumHozam, double maximumHozam, Kockazat kockazat) : base(azonosito, kezdotoke, 0.01, lekotesIdeje)
+        public MutualFundShare(string id, int initialCapital, double interestRate, int maturityYears, string equityFund, double minimumYield, double maximumYield, Risk risk) : base(id, initialCapital, 0.01, maturityYears)
         {
-            ReszvenyAlap = reszvenyAlap;
-            MinimumHozam = minimumHozam;
-            MaximumHozam = maximumHozam;
-            Kockazat = kockazat;
+            EquityFund = equityFund;
+            MinimumYield = minimumYield;
+            MaximumYield = maximumYield;
+            Risk = risk;
         }
 
-        public BefektetesiJegy(string azonosito, int kezdotoke, double kamatlab, int lekotesIdeje, string reszvenyAlap, double minimumHozam, double maximumHozam) : this(azonosito, kezdotoke, kamatlab, lekotesIdeje, reszvenyAlap, minimumHozam, maximumHozam, Kockazat.alacsony)
+        public MutualFundShare(string id, int initialCapital, double interestRate, int maturityYears, string equityFund, double minimumYield, double maximumYield) : this(id, initialCapital, interestRate, maturityYears, equityFund, minimumYield, maximumYield, Risk.Low)
         {
 
         }
 
-        public override int Hozam(int elteltEvek)
+        public override int Yield(int elapsedYears)
         {
-            int hozam = Convert.ToInt32(Kezdotoke * Math.Pow(1 + (Kamatlab / 100), elteltEvek));
+            int accumulatedValue = Convert.ToInt32(InitialCapital * Math.Pow(1 + (InterestRate / 100), elapsedYears));
 
-            for (int i = 0; i < elteltEvek; i++)
+            for (int i = 0; i < elapsedYears; i++)
             {
-                hozam = Convert.ToInt32(Kezdotoke * (1 + (0.01 + rnd.NextDouble() * (0.5 - 0.01))));
+                accumulatedValue = Convert.ToInt32(InitialCapital * (1 + (0.01 + rnd.NextDouble() * (0.5 - 0.01))));
             }
 
-            return hozam;
+            return accumulatedValue;
         }
 
         public override string ToString()
         {
-            return base.ToString() + $" részvényalap: {ReszvenyAlap}, minimum hozam: {MinimumHozam}, maximum hozam: {MaximumHozam}, kockázat: {Kockazat}";
+            return base.ToString() + $" equity fund: {EquityFund}, minimum yield: {MinimumYield}, maximum yield: {MaximumYield}, risk: {Risk}";
         }
-
     }
 }
