@@ -118,7 +118,7 @@ if __name__ == "__main__":
     results = {}
 
     for member in members:
-        print(f"\n--- Dokumentálás: {member['name']} ({member['type']}) ---")
+        print(f"\nDokumentálás: {member['name']} ({member['type']})")
         doc = generate_documentation(member["fullCode"])
         results[member["name"]] = doc
 
